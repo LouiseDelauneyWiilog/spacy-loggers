@@ -22,6 +22,7 @@ def mlflow_logger_v2(
     tags: Optional[Dict[str, Any]] = None,
     remove_config_values: List[str] = SimpleFrozenList(),
     log_custom_stats: Optional[List[str]] = None,
+    registered_model_name: Optional[str] = None,
 ) -> LoggerT:
     """Creates a logger that interoperates with the MLflow framework.
 
@@ -81,6 +82,7 @@ def mlflow_logger_v1(
     nested: bool = False,
     tags: Optional[Dict[str, Any]] = None,
     remove_config_values: List[str] = SimpleFrozenList(),
+    registered_model_name: Optional[str] = None,
 ) -> LoggerT:
     """Creates a logger that interoperates with the MLflow framework.
 
@@ -211,7 +213,7 @@ def _log_step_mlflow(
         )
     if output_path and score == max(info["checkpoints"])[0]:
         nlp = load(output_path)
-        mlflow.spacy.log_model(nlp, "best")
+        mlflow.spacy.log_model(nlp, "best", registered_model_name)
 
 
 def _finalize_mlflow(
