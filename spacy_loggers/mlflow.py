@@ -69,7 +69,7 @@ def mlflow_logger_v2(
             print("*************")
             print(info)
             mlflow.register_model(
-                f"runs:/{info["run_id"]}/test"
+                f"runs:/{info.get("run_id")}/test"
             )
 
         def finalize() -> None:
