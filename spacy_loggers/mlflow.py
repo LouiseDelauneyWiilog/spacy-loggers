@@ -63,7 +63,7 @@ def mlflow_logger_v2(
         )
 
         def log_step(info: Optional[Dict[str, Any]]):
-            _log_step_mlflow(mlflow, info)
+            _log_step_mlflow(mlflow, info, registered_model_name)
             _log_custom_stats(mlflow, info, match_stat)
 
         def finalize() -> None:
@@ -124,7 +124,7 @@ def mlflow_logger_v1(
 
         def log_step(info: Optional[Dict[str, Any]]):
             console_log_step(info)
-            _log_step_mlflow(mlflow, info)
+            _log_step_mlflow(mlflow, info, registered_model_name)
 
         def finalize() -> None:
             console_finalize()
