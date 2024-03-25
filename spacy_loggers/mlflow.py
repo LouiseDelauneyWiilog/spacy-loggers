@@ -65,7 +65,7 @@ def mlflow_logger_v2(
             _log_step_mlflow(mlflow, info)
             _log_custom_stats(mlflow, info, match_stat)
 
-        def register_model():
+        def register_model(info: Optional[Dict[str, Any]]):
             print("*************")
             print(info)
             mlflow.register_model(
