@@ -22,7 +22,6 @@ def mlflow_logger_v2(
     tags: Optional[Dict[str, Any]] = None,
     remove_config_values: List[str] = SimpleFrozenList(),
     log_custom_stats: Optional[List[str]] = None,
-    registered_model_name: Optional[str] = None,
 ) -> LoggerT:
     """Creates a logger that interoperates with the MLflow framework.
 
@@ -63,13 +62,18 @@ def mlflow_logger_v2(
         )
 
         def log_step(info: Optional[Dict[str, Any]]):
-            _log_step_mlflow(mlflow, info, registered_model_name)
+            _log_step_mlflow(mlflow, info)
             _log_custom_stats(mlflow, info, match_stat)
+
+        def register_model():
+            mlflow.register_model(
+                f"runs:/{info["run_id"]}/test"
+            )
 
         def finalize() -> None:
             _finalize_mlflow(mlflow)
 
-        return log_step, finalize
+        return log_step, register_model, finalize
 
     return setup_logger
 
@@ -82,7 +86,6 @@ def mlflow_logger_v1(
     nested: bool = False,
     tags: Optional[Dict[str, Any]] = None,
     remove_config_values: List[str] = SimpleFrozenList(),
-    registered_model_name: Optional[str] = None,
 ) -> LoggerT:
     """Creates a logger that interoperates with the MLflow framework.
 
@@ -124,7 +127,7 @@ def mlflow_logger_v1(
 
         def log_step(info: Optional[Dict[str, Any]]):
             console_log_step(info)
-            _log_step_mlflow(mlflow, info, registered_model_name)
+            _log_step_mlflow(mlflow, info)
 
         def finalize() -> None:
             console_finalize()
@@ -191,7 +194,6 @@ def _setup_mlflow(
 def _log_step_mlflow(
     mlflow: ModuleType,
     info: Optional[Dict[str, Any]],
-    registered_model_name: Optional[str],
 ):
     if info is None:
         return
@@ -214,7 +216,7 @@ def _log_step_mlflow(
         )
     if output_path and score == max(info["checkpoints"])[0]:
         nlp = load(output_path)
-        mlflow.spacy.log_model(nlp, "best", registered_model_name=registered_model_name)
+        mlflow.spacy.log_model(nlp, "best")
 
 
 def _finalize_mlflow(
