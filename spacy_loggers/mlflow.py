@@ -66,6 +66,8 @@ def mlflow_logger_v2(
             _log_custom_stats(mlflow, info, match_stat)
 
         def register_model():
+            print("*************")
+            print(info)
             mlflow.register_model(
                 f"runs:/{info["run_id"]}/test"
             )
