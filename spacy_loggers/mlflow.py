@@ -191,6 +191,7 @@ def _setup_mlflow(
 def _log_step_mlflow(
     mlflow: ModuleType,
     info: Optional[Dict[str, Any]],
+    registered_model_name: Optional[str],
 ):
     if info is None:
         return
