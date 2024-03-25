@@ -213,7 +213,7 @@ def _log_step_mlflow(
         )
     if output_path and score == max(info["checkpoints"])[0]:
         nlp = load(output_path)
-        mlflow.spacy.log_model(nlp, "best", registered_model_name)
+        mlflow.spacy.log_model(nlp, "best", registered_model_name=registered_model_name)
 
 
 def _finalize_mlflow(
